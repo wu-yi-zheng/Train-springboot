@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>TrainInfoPage</title>
+</head>
+<body>
+	<table cellpadding="5" border="１">
+
+		<tr>
+			<th>日期</th>
+			<th>車次</th>
+			<th>出發站</th>
+			<th>出發時間</th>
+			<th>抵達站</th>
+			<th>抵達時間</th>
+			<th>行駛時間</th>
+			<th>車種</th>
+			<th>線路</th>
+		</tr>
+		<tr th:each="obj:${trainInfoList}">
+			<td th:text="${obj.trainDate}"></td>
+			<td th:text="${obj.trainNo}"></td>
+			<td th:text="${obj.startingStationNameZhTw}"></td>
+			<td th:text="${obj.departureTime}"></td>
+			<td th:text="${obj.ending_station_nameZhTw}"></td>
+			<td th:text="${obj.arrivalTime}"></td>
+			<td th:text="${obj.travelTime}"></td>
+			<td th:text="${obj.trainTypenameZhTw}"></td>
+			<td th:switch="${obj.tripLine}"><span th:case="0">不經山海線</span> <span
+				th:case="1">山線</span> <span th:case="2">海線</span> <span th:case="3">成追線</span>
+		</tr>
+	</table>
+</body>
+</html>

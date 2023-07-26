@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>車站列表</title>
+</head>
+<body>
+
+<h2>車站名稱</h2>
+<table border="1">
+<tr>
+<td th:text="車站ID">
+<td th:text="車站中文名">
+<td th:text="車站英文名">
+</tr>
+<tr th:each="obj:${stationNameList}">
+<td th:text="${obj.travelTime}"></td>
+    <td th:text="${obj.station_name_zh_tw}"></td>
+        <td th:text="${obj.trainDate}"></td>
+
+</tr>
+</table>
+</body>
+</html>

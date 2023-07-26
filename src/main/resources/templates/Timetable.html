@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Timetable</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet"/>
+<style>
+    form{
+        width:10%;
+    }
+</style>
+</head>
+<body>
+<!--標題-->
+    <h1>
+        歡迎使用列車時刻表
+    </h1>
+
+<!--標題 end-->
+<!-- 頁面內容 -->
+<div id="pageContent">
+	<button id="callApi">點擊取得十日內火車時刻表</button>
+    <form method="post" th:action="@{/trainInfo}" th:object="${trainInfo}">
+        <!-- 出發站 -->
+
+        <label for="select">出發站:</label>
+        <select id="select" name="select" selected="selected" th:field="*{departureStation}">
+            <option th:each="station : ${stationNameList}" th:text="${station.getStation_name_zh_tw()}"
+                    th:value="${station.startingStationId}"></option>
+        </select><br>
+        <a href="/stationList" target="_blank"
+           title="車站代碼查詢(另開新視窗)">車站名稱查詢</a><br>
+        <!-- 抵達站 -->
+        <label for="select2">抵達站:</label>
+        <select id="select2" name="select" th:field="*{arrivalStation}">
+            <option th:each="station : ${stationNameList}" th:text="${station.getStation_name_zh_tw()}"
+                    th:value="${station.startingStationId}"></option>
+        </select><br>
+        <label for="date1">選擇日期：</label>
+        <div class="input-group date" id='date1'>
+            <input type="text" class="form-control" placeholder="YYYY-MM-DD" th:field="*{trainDate}"/>
+            <span class="input-group-addon">
+          <i class="glyphicon glyphicon-calendar"></i>
+      </span>
+        </div>
+        <!-- 依時段查詢方式(開始/結束) -->
+
+        <label>出發時段</label><br>
+        <!-- 時段開始 -->
+        <input type="time" name="submit" th:field="*{departureTime}"><br>
+        <!-- 時段結束 -->
+        <!--確認按鈕-->
+        <input type="submit" value="查詢">
+    </form>
+
+</div>
+<!--日期選擇器套件Bootstrap DatePicker-->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js"></script>
+
+<script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+<script>
+    $('#date1').datetimepicker({
+        date: null,
+        format: 'YYYY-MM-DD', //日期的顯示格式
+        locale: moment.locale('zh-tw'), //國別
+        minDate: moment().add(0, 'days'), //顯示最小天數
+        maxDate: moment().add(10 - 1, 'days'), //顯示最大天數，10為最大的顯示範圍為一個月為限
+    });
+	
+    $('#callApi').click(function(){
+    	var newBtn = $(this).closest("button");
+		newBtn.html("獲取十日內火車時刻表中...");
+		newBtn.attr('disabled', true);
+		//fetch("/callTest", { method: "GET"});
+		fetch("/callApi", { method: "GET"}).then(result => result.json()).then(message => {
+			var rs = JSON.stringify(message);
+			alert(rs);
+			newBtn.html("點擊取得十日內火車時間表");
+			newBtn.attr('disabled', false);
+
+		});
+    });
+
+</script>
+</body>
+</html>
